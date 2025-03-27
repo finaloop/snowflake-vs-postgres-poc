@@ -30,14 +30,45 @@
    python -m venv .venv
    source .venv/bin/activate
 
-   # Install dependencies
-   uv pip install -e .
+   # Install dependencies with uv
+   uv sync
+   
+   # For specific benchmarks
+   uv add snowflake-connector-python
    ```
 
 3. Configuration
    - Database connection strings
-   - Snowflake credentials
+   - Snowflake credentials via connections.toml
    - Environment variables
+
+## Snowflake Configuration
+1. Connection Configuration
+   - Create `~/.snowflake/connections.toml` file
+   - Configure named connections
+   - Example configuration:
+   ```toml
+   [hybrid_table_poc]
+   account = "your-snowflake-account"
+   user = "your-username"
+   password = "your-password"  # Optional if using SSO
+   authenticator = "externalbrowser"  # Use for SSO authentication
+   warehouse = "your-warehouse" 
+   role = "your-role"
+   database = "FINALOOP"
+   schema = "PUBLIC"
+   ```
+
+2. Authentication Methods
+   - Username/password
+   - SSO via external browser
+   - Key pair authentication
+   - OAuth
+
+3. Connection Usage
+   - Named connections in code
+   - Override parameters as needed
+   - Connection pooling considerations
 
 ## Technical Constraints
 1. Python Version
@@ -54,6 +85,7 @@
    - Network latency
    - Database resources
    - Memory usage
+   - Snowflake warehouse sizing
 
 ## Dependencies
 1. Core Dependencies
@@ -74,6 +106,7 @@
 ## Development Workflow
 1. Code Organization
    - src/snowpark_vs_postgres_poc/
+   - src/join_benchmark/
    - Modular structure
    - Clear separation of concerns
 
@@ -85,4 +118,5 @@
 3. Testing Strategy
    - Unit tests
    - Integration tests
-   - Performance tests 
+   - Performance tests
+   - Benchmark runs 

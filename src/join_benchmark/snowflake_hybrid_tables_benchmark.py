@@ -1,13 +1,9 @@
 import time
-import json
-import random
-from datetime import datetime, timedelta
-from typing import Dict, List, Any, Tuple, Optional
+from datetime import datetime
+from typing import Dict, List, Any, Optional
 from threading import Lock
-import uuid
 from snowflake.connector import connect
 
-from ..load_testing.data_generator import generate_random_date
 
 
 class SnowflakeHybridTablesBenchmark:
@@ -186,8 +182,91 @@ class SnowflakeHybridTablesBenchmark:
         finally:
             cursor.close()
 
-    def run_benchmark(self, num_iterations: int = 10) -> Dict[str, Any]:
-        """Run the full benchmark for Snowflake hybrid tables with watermarks."""
+    def run_split_to_table_benchmark(self, num_iterations: int = 10) -> Dict[str, Any]:
+        """Run benchmark using SPLIT_TO_TABLE approach instead of hybrid tables."""
+        print(f"Running SPLIT_TO_TABLE benchmark for {num_iterations} iterations...")
+        
+        # Get company IDs
+        company_ids = self.get_company_ids()
+        if not company_ids:
+            raise ValueError("No company_ids found in business table")
+        
+        # Fixed watermark date (same as in hybrid table benchmark)
+        last_processed_date = datetime(2020, 1, 1)
+        
+        cursor = self.connection.cursor()
+        try:
+            # Run benchmark
+            query_times = []
+            
+            for i in range(num_iterations):
+                # Measure query time
+                start_time = time.time()
+                
+                # Create a temporary table with company IDs
+                temp_table_name = f"TEMP_COMPANY_IDS_{int(time.time())}"
+                
+                # Create temp table
+                cursor.execute(f"""
+                CREATE OR REPLACE TEMPORARY TABLE {temp_table_name} (
+                    COMPANY_ID STRING
+                )
+                """)
+                
+                # Insert company IDs in batches to avoid query size limitations
+                batch_size = 100
+                for j in range(0, len(company_ids), batch_size):
+                    batch = company_ids[j:j+batch_size]
+                    values = ", ".join([f"('{company_id}')" for company_id in batch])
+                    cursor.execute(f"""
+                    INSERT INTO {temp_table_name} (COMPANY_ID)
+                    VALUES {values}
+                    """)
+                
+                # Run the actual benchmark query
+                cursor.execute(f"""
+                WITH company_watermarks AS (
+                    SELECT 
+                        t.COMPANY_ID,
+                        TO_TIMESTAMP('{last_processed_date}') AS LAST_PROCESSED_DATE
+                    FROM {temp_table_name} t
+                )
+                SELECT COUNT(*)
+                FROM {self.business_table_name} b
+                JOIN company_watermarks w
+                  ON b.COMPANY_ID = w.COMPANY_ID
+                WHERE b.ORDER_CREATED_DATE > w.LAST_PROCESSED_DATE
+                """)
+                
+                # Just get the count without fetching all records
+                count_result = cursor.fetchone()[0]
+                query_time = time.time() - start_time
+                
+                query_times.append(query_time)
+                
+                print(f"Iteration {i+1}/{num_iterations}: Found {count_result} matching records in {query_time:.4f} seconds")
+                
+                # Clean up temp table
+                cursor.execute(f"DROP TABLE IF EXISTS {temp_table_name}")
+            
+            # Calculate statistics
+            avg_query_time = sum(query_times) / len(query_times)
+            
+            return {
+                "database": "Snowflake SPLIT_TO_TABLE",
+                "iterations": num_iterations,
+                "avg_query_time_seconds": avg_query_time,
+                "min_query_time": min(query_times),
+                "max_query_time": max(query_times),
+                "total_time_seconds": sum(query_times),
+                "record_count": count_result
+            }
+                
+        finally:
+            cursor.close()
+
+    def run_benchmark(self, num_iterations: int = 10) -> Dict[str, List[Dict[str, Any]]]:
+        """Run the full benchmark comparing hybrid tables vs SPLIT_TO_TABLE approach."""
         print("Setting up Snowflake watermarks table for benchmark...")
         self.setup_watermarks_table()
         
@@ -198,14 +277,21 @@ class SnowflakeHybridTablesBenchmark:
         start_time = time.time()
         
         try:
-            # Run the benchmark
-            results = self.run_direct_query_benchmark(num_iterations)
+            # Run hybrid table benchmark
+            hybrid_results = self.run_direct_query_benchmark(num_iterations)
+            
+            # Run SPLIT_TO_TABLE benchmark
+            print("\nStarting SPLIT_TO_TABLE benchmark...")
+            split_results = self.run_split_to_table_benchmark(num_iterations)
             
             # Add total benchmark time
             total_time = time.time() - start_time
-            results["total_benchmark_time_seconds"] = total_time
             
-            return results
+            # Combine results
+            return {
+                "total_benchmark_time_seconds": total_time,
+                "results": [hybrid_results, split_results]
+            }
         finally:
             # Close connection
             if self._connection is not None:

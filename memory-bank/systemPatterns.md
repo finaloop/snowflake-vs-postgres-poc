@@ -6,6 +6,7 @@
    - Benchmark Executor: Runs tests on both systems
    - Results Analyzer: Processes and compares results
    - Report Generator: Creates documentation and insights
+   - Hybrid Tables Benchmark: Tests Snowflake join patterns
 
 2. Component Relationships
    ```mermaid
@@ -15,6 +16,7 @@
        RA --> RG[Report Generator]
        BE --> SF[Snowflake]
        BE --> PG[PostgreSQL]
+       HTB[Hybrid Tables Benchmark] --> SF
    ```
 
 ## Key Technical Decisions
@@ -33,6 +35,11 @@
    - Statistical analysis of metrics
    - Markdown report generation
 
+4. Snowflake Watermark Patterns
+   - Hybrid tables for persistent watermarks
+   - Temporary tables for dynamic watermarks
+   - Performance comparison between approaches
+
 ## Design Patterns in Use
 1. Strategy Pattern
    - Abstract database interfaces
@@ -48,6 +55,11 @@
    - Progress monitoring
    - Results collection
    - Error handling
+
+4. Benchmark Pattern
+   - Setup/teardown for test environment
+   - Multiple iterations for statistical validity
+   - Consistent methodology across tests
 
 ## Component Relationships
 1. Data Flow
@@ -79,4 +91,20 @@
 3. Analysis Errors
    - Graceful degradation
    - Partial results handling
-   - Error reporting 
+   - Error reporting
+
+## Snowflake Integration Patterns
+1. Hybrid Tables Usage
+   - Primary key for company-level data
+   - Timestamp watermarks for incremental processing
+   - Efficient joins with large tables
+
+2. Temporary Tables Approach
+   - Dynamic creation of company lists
+   - Batch processing for large datasets
+   - Clean up after query execution
+
+3. Connection Management
+   - Named connections via connections.toml
+   - External browser authentication
+   - Context management for resources 

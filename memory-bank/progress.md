@@ -16,6 +16,12 @@
    - Performance measurement
    - Results collection
 
+4. Snowflake Hybrid Tables Join Benchmark
+   - Hybrid table watermark approach
+   - Temporary table alternative approach
+   - Performance comparison (5.2x difference)
+   - Documentation with setup instructions
+
 ## What's Left to Build
 1. Core Features
    - Advanced query optimization
@@ -37,15 +43,19 @@
    - Basic functionality complete
    - Core features working
    - Initial testing done
+   - Join benchmark comparison implemented
+   - UV package management integration
 
 2. Documentation Status
    - Memory bank initialized
    - Basic documentation in place
-   - More documentation needed
+   - Join benchmark README created with setup instructions
+   - Snowflake connection configuration documented
 
 3. Testing Status
    - Basic tests implemented
    - Performance tests running
+   - Join benchmark executed with real data
    - More test coverage needed
 
 ## Known Issues
@@ -69,13 +79,16 @@
    - Complete core features
    - Improve documentation
    - Enhance testing
+   - Extend benchmark with additional comparison approaches
 
 2. Short-term Goals
    - Optimize performance
    - Add analysis features
    - Create user guides
+   - Test with different warehouse sizes
 
 3. Long-term Goals
    - Framework expansion
    - Additional integrations
-   - Community support 
+   - Community support
+   - Comprehensive performance guidelines 
