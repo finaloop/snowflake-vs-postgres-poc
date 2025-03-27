@@ -1,0 +1,12 @@
+{
+  "snowflake": {
+    "database": "Snowflake Direct",
+    "iterations": 10,
+    "avg_query_time_seconds": 0.9280880212783813,
+    "min_query_time": 0.690911054611206,
+    "max_query_time": 1.1694467067718506,
+    "total_time_seconds": 9.280880212783813,
+    "record_count": 3593964,
+    "total_benchmark_time_seconds": 9.281505107879639
+  }
+}

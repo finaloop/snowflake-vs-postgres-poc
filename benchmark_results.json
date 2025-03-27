@@ -1,0 +1,14 @@
+{
+  "timestamp": 1743025005.6900852,
+  "results": [
+    {
+      "database": "PostgreSQL",
+      "target_inserts_per_second": 3000,
+      "total_records": 100000,
+      "actual_records_inserted": 100000,
+      "total_time_seconds": 33.82034206390381,
+      "insert_time_seconds": 1415.6836931705475,
+      "average_inserts_per_second": 2956.8003721266095
+    }
+  ]
+}
