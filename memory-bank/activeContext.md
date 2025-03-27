@@ -27,6 +27,8 @@
    - Snowflake hybrid tables join benchmark implementation
    - Temporary table alternative approach
    - UV package manager integration
+   - UV sync for dependency management
+   - UV run for script execution
 
 2. Documentation Updates
    - Initial memory bank creation

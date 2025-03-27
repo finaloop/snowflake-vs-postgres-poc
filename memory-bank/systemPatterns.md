@@ -107,4 +107,20 @@
 3. Connection Management
    - Named connections via connections.toml
    - External browser authentication
-   - Context management for resources 
+   - Context management for resources
+
+## Execution Patterns
+1. Script Execution
+   - UV run for Python script execution
+   - Direct execution of benchmark modules
+   - Consistent execution environment
+
+2. Dependency Management
+   - UV sync for installing all dependencies
+   - UV add for specific package installation
+   - Reproducible execution environment
+
+3. Development Workflow
+   - Code-first development
+   - Benchmark-driven implementation
+   - Consistent execution via UV 

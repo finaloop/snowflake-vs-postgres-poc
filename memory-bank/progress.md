@@ -21,6 +21,7 @@
    - Temporary table alternative approach
    - Performance comparison (5.2x difference)
    - Documentation with setup instructions
+   - UV-based installation (uv sync) and execution (uv run)
 
 ## What's Left to Build
 1. Core Features

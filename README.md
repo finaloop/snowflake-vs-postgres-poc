@@ -12,7 +12,7 @@ Measures and compares the data insertion performance between:
 
 To run:
 ```bash
-python run_benchmark.py
+uv run run_benchmark.py
 ```
 
 ### 2. Join Benchmark
@@ -21,31 +21,40 @@ Measures the performance of joins between Snowflake's standard tables and hybrid
 
 To run:
 ```bash
-python run_join_benchmark.py --benchmark snowflake
+uv run run_join_benchmark.py
 ```
 
-See the [detailed results](src/join_benchmark/join_benchmark.md) for more information about the join benchmark.
+See the [detailed results](src/join_benchmark/README.md) for more information about the join benchmark.
 
 ## Requirements
 
 - Python 3.11+
+- [UV](https://github.com/astral-sh/uv) package manager
 - Snowflake account configured with `hybrid_table_poc` connection
 - PostgreSQL database (optional, for load testing)
 
 ## Installation
 
 ```bash
-# Create a virtual environment
-python -m venv .venv
-source .venv/bin/activate
+# Install all dependencies using uv
+uv sync
 
-# Install dependencies
-pip install -e .
+# Install additional packages as needed
+uv add snowflake-connector-python
 ```
 
-Alternatively, use uv:
-```bash
-uv venv .venv
-source .venv/bin/activate
-uv pip install -e .
+## Snowflake Configuration
+
+Create a `~/.snowflake/connections.toml` file with your Snowflake connection details:
+
+```toml
+[hybrid_table_poc]
+account = "your-snowflake-account"
+user = "your-username"
+password = "your-password"  # Optional if using SSO
+authenticator = "externalbrowser"  # Use for SSO authentication
+warehouse = "your-warehouse" 
+role = "your-role"
+database = "FINALOOP"
+schema = "PUBLIC"
 ```

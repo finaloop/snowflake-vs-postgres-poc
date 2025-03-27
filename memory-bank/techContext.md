@@ -26,14 +26,10 @@
 
 2. Installation Steps
    ```bash
-   # Create virtual environment
-   python -m venv .venv
-   source .venv/bin/activate
-
-   # Install dependencies with uv
+   # Install all dependencies using uv
    uv sync
    
-   # For specific benchmarks
+   # Add specific packages as needed
    uv add snowflake-connector-python
    ```
 
@@ -41,6 +37,7 @@
    - Database connection strings
    - Snowflake credentials via connections.toml
    - Environment variables
+   - Using uv run for executing scripts
 
 ## Snowflake Configuration
 1. Connection Configuration

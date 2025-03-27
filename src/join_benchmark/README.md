@@ -35,6 +35,10 @@ schema = "PUBLIC"
 From the project root directory:
 
 ```bash
+# Install all dependencies using uv
+uv sync
+
+# Add the Snowflake connector specifically
 uv add snowflake-connector-python
 ```
 
@@ -43,7 +47,7 @@ uv add snowflake-connector-python
 To run the benchmark:
 
 ```bash
-cd /path/to/project
+# Run from the project root
 uv run src/join_benchmark/snowflake_hybrid_tables_benchmark.py
 ```
 
