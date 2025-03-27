@@ -2,8 +2,7 @@ import time
 import json
 import random
 from datetime import datetime, timedelta
-import asyncio
-from typing import Dict, List, Any, Tuple
+from typing import Dict, Any
 import psycopg
 from psycopg.rows import dict_row
 from psycopg_pool import AsyncConnectionPool
@@ -121,7 +120,7 @@ class PostgresHybridTablesBenchmark:
                 
                 param_idx = i * 6  # 6 parameters per record
                 values_list.append(
-                    f"($%s, $%s, $%s, $%s, $%s, $%s)" % (
+                    "($%s, $%s, $%s, $%s, $%s, $%s)" % (
                         param_idx + 1, param_idx + 2, param_idx + 3,
                         param_idx + 4, param_idx + 5, param_idx + 6
                     )
@@ -174,7 +173,7 @@ class PostgresHybridTablesBenchmark:
                 
                 param_idx = count * 4  # 4 parameters per record
                 values_list.append(
-                    f"($%s, $%s, $%s, $%s)" % (
+                    "($%s, $%s, $%s, $%s)" % (
                         param_idx + 1, param_idx + 2, param_idx + 3, param_idx + 4
                     )
                 )

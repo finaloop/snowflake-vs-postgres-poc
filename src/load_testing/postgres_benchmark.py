@@ -1,7 +1,7 @@
 import time
 import json
 import asyncio
-from typing import Dict, List, Any, Tuple
+from typing import Dict, Any, Tuple
 import psycopg
 from psycopg.rows import dict_row
 from psycopg_pool import AsyncConnectionPool

@@ -1,8 +1,6 @@
 import time
-import json
-from typing import Dict, List, Any, Tuple, Optional
+from typing import Dict, Any, Tuple, Optional
 from threading import Lock
-import uuid
 from snowflake.connector import connect
 
 from .data_generator import generate_fake_record
@@ -127,7 +125,7 @@ class SnowflakeBenchmark:
         print(
             f"Snowflake: Running {total_records} inserts with target rate of {inserts_per_second} inserts/second"
         )
-        print(f"Using Snowflake's execute_async for maximum throughput")
+        print("Using Snowflake's execute_async for maximum throughput")
 
         # Generate all records upfront
         print("Generating records...")

@@ -1,8 +1,7 @@
 import asyncio
 import argparse
 import json
-import os
-from typing import Dict, List, Any
+from typing import Dict, Any
 
 from .snowflake_hybrid_tables_benchmark import SnowflakeHybridTablesBenchmark
 from .postgres_hybrid_tables_benchmark import PostgresHybridTablesBenchmark

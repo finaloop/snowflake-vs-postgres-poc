@@ -2,9 +2,8 @@ import time
 import json
 import random
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Tuple, Optional
+from typing import Dict, Any, Optional
 from threading import Lock
-import uuid
 from snowflake.connector import connect
 
 from .data_generator import generate_fake_record, generate_random_date
